@@ -2,14 +2,15 @@ import * as model from './model.js';
 import recipeView from './view/recipeView.js';
 import searchView from './view/searchView.js';
 import resultView from './view/resultView.js';
+import paginationView from './view/paginationView.js';
 // import icons from '../img/icons.svg';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
 ///////////////////////////////////////
 
@@ -39,7 +40,9 @@ const controlSearchResult = async function () {
     if (!query) return;
     await model.loadSearchResults(query);
 
-    resultView.render(model.state.search.results);
+    resultView.render(model.getSearchResultsPage(6));
+
+    paginationView.render(model.state.search);
   } catch (err) {
     console.log(err);
   }
