@@ -82,8 +82,27 @@ const controlBookmarks = function () {
   bookmarkView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (data) {
-  console.log(data);
+const controlAddRecipe = async function (data) {
+  try {
+    addRecipeView.renderSpinner();
+
+    await model.uploadRecipe(data);
+    console.log(model.state.recipe);
+
+    recipeView.render(model.state.recipe);
+
+    addRecipeView.renderMessage();
+
+    bookmarkView.render(model.state.bookmarks);
+
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, 2500);
+  } catch (err) {
+    addRecipeView.renderError(err.message);
+  }
 };
 
 const init = function () {
